@@ -3,7 +3,24 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load your CSV data
-data = pd.read_csv("world-data-2023.csv")
+data = pd.read_csv("C:/Users/User/Desktop/AUB Masters/MSBA 325/world-data-2023.csv")
+
+# Function to generate the scatter plot
+def create_scatter_plot(data):
+    fig, ax = plt.subplots(figsize=(10, 6))
+    colors = {'Africa': 'red', 'Asia': 'blue', 'Europe': 'green', 'North America': 'purple', 'Oceania': 'orange', 'South America': 'brown'}
+
+    for continent, color in colors.items():
+        subset = data[data['Continent'] == continent]
+        ax.scatter(subset['Life expectancy'], subset['Continent'], label=continent, color=color, alpha=0.7, s=100)
+
+    ax.set_xlabel("Life Expectancy")
+    ax.set_ylabel("Continent")
+    ax.set_title("Life Expectancy by Continent")
+    ax.legend()
+
+    # Display the scatter plot
+    st.pyplot(fig)
 
 # Streamlit app title
 st.title("Data Analysis Dashboard")
@@ -27,39 +44,29 @@ if selected_viz == "Life Expectancy by Continent":
         st.subheader("Filtered Data")
         st.write(filtered_data)
 
-if selected_viz == "Total CO2 Emissions by Continent":
-    # Clean and convert the "CO2-Emissions" column to numeric (remove commas)
-    data["Co2-Emissions"] = data["Co2-Emissions"].str.replace(",", "").astype(float)
+        # Create and display the scatter plot with filtered data
+        create_scatter_plot(filtered_data)
+        
+        st.write("As seen in the above visualizations Africa has the lowest life expectancy while Europe has the highest one.")
 
-    # Calculate CO2 emissions per continent
-    co2_emissions_by_continent = data.groupby("Continent")["Co2-Emissions"].sum().reset_index()
+else:
+    if selected_viz == "Total CO2 Emissions by Continent":
+        # Clean and convert the "CO2-Emissions" column to numeric (remove commas)
+        data["Co2-Emissions"] = data["Co2-Emissions"].str.replace(",", "").astype(float)
 
-    # Create a bar chart to display total CO2 emissions by continent
-    fig, ax = plt.subplots(figsize=(10, 6))
-    ax.bar(co2_emissions_by_continent["Continent"], co2_emissions_by_continent["Co2-Emissions"])
-    ax.set_xlabel("Continent")
-    ax.set_ylabel("Total CO2 Emissions")
-    ax.set_title("Total CO2 Emissions by Continent")
+        # Calculate CO2 emissions per continent
+        co2_emissions_by_continent = data.groupby("Continent")["Co2-Emissions"].sum().reset_index()
 
-    # Rotate x-axis labels for better readability
-    plt.xticks(rotation=45)
+        # Create a bar chart to display total CO2 emissions by continent
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.bar(co2_emissions_by_continent["Continent"], co2_emissions_by_continent["Co2-Emissions"])
+        ax.set_xlabel("Continent")
+        ax.set_ylabel("Total CO2 Emissions")
+        ax.set_title("Total CO2 Emissions by Continent")
 
-    # Display the bar chart
-    st.pyplot(fig)
+        # Rotate x-axis labels for better readability
+        plt.xticks(rotation=45)
 
-elif selected_viz == "Life Expectancy by Continent":
-    # Create a scatter plot to display life expectancy by continent
-    fig, ax = plt.subplots(figsize=(10, 6))
-    colors = {'Africa': 'red', 'Asia': 'blue', 'Europe': 'green', 'North America': 'purple', 'Oceania': 'orange', 'South America': 'brown'}
-
-    for continent, color in colors.items():
-        subset = data[data['Continent'] == continent]
-        ax.scatter(subset['Life expectancy'], subset['Continent'], label=continent, color=color, alpha=0.7, s=100)
-
-    ax.set_xlabel("Life Expectancy")
-    ax.set_ylabel("Continent")
-    ax.set_title("Life Expectancy by Continent")
-    ax.legend()
-
-    # Display the scatter plot
-    st.pyplot(fig)
+        # Display the bar chart
+        st.pyplot(fig)
+        st.write("Asia seems to have the highest Co2 emission while Oceania seems to have the lowest.")
