@@ -5,6 +5,23 @@ import matplotlib.pyplot as plt
 # Load your CSV data
 data = pd.read_csv("world-data-2023.csv")
 
+# Function to generate the scatter plot
+def create_scatter_plot(data):
+    fig, ax = plt.subplots(figsize=(10, 6))
+    colors = {'Africa': 'red', 'Asia': 'blue', 'Europe': 'green', 'North America': 'purple', 'Oceania': 'orange', 'South America': 'brown'}
+
+    for continent, color in colors.items():
+        subset = data[data['Continent'] == continent]
+        ax.scatter(subset['Life expectancy'], subset['Continent'], label=continent, color=color, alpha=0.7, s=100)
+
+    ax.set_xlabel("Life Expectancy")
+    ax.set_ylabel("Continent")
+    ax.set_title("Life Expectancy by Continent")
+    ax.legend()
+
+    # Display the scatter plot
+    st.pyplot(fig)
+
 # Streamlit app title
 st.title("Data Analysis Dashboard")
 
@@ -29,12 +46,12 @@ if selected_viz == "Life Expectancy by Continent":
 
         # Create and display the scatter plot with filtered data
         create_scatter_plot(filtered_data)
-
-        st.write("As seen in the above visualizations, Africa has the lowest life expectancy while Europe has the highest one.")
+        
+        st.write("As seen in the above visualizations Africa has the lowest life expectancy while Europe has the highest one.")
 
 else:
     if selected_viz == "Total CO2 Emissions by Continent":
-        # Create a dropdown to select the continent for CO2 emissions
+       # Create a dropdown to select the continent for CO2 emissions
         selected_continent = st.selectbox("Select Continent for CO2 Emissions", data['Continent'].unique())
 
         # Filter data based on the selected continent
