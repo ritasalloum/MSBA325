@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load your CSV data
-data = pd.read_csv("C:/Users/User/Desktop/AUB Masters/MSBA 325/world-data-2023.csv")
+data = pd.read_csv("world-data-2023.csv")
 
 # Function to generate the scatter plot
 def create_scatter_plot(data):
